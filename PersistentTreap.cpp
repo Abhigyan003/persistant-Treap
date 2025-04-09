@@ -1,7 +1,13 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <optional>
+#include <utility>
+#include <random>
+#include <chrono>
+#include "include/Values.hpp"
+#include "include/Nodes.hpp"
 
 using namespace std;
-mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+std :: mt19937 rng(std :: chrono::steady_clock::now().time_since_epoch().count());
 
 template<typename T>
 std::ostream& operator<<(std::ostream& os, const std::optional<T>& opt) {
@@ -14,66 +20,6 @@ std::ostream& operator<<(std::ostream& os, const std::optional<T>& opt) {
 }
 
 template<typename Key, typename Value>
-struct Node;
-
-
-template<typename Value>
-class Values{
-private:
-    vector<Value> values;
-    int sz;
-public:
-    Values() : sz(0) {}
-    Values(const vector<Value>& initialValues) : values(initialValues), sz(initialValues.size()) {}
-
-    int add(const Value value){
-        values.push_back(value);
-        return sz++;
-    }
-
-    int size() const{
-        return sz;
-    }
-
-    Value& operator[](int index) {
-        return values[index];
-    }
-};
-
-template<typename Key, typename Value>
-class Nodes {
-private:
-    vector<Node<Key, Value>> nodes;
-    int sz;
-public:
-    Nodes() : sz(0) {nodes.push_back(Node<Key, Value>());}
-    Nodes(const vector<Node<Key, Value>>& initialNodes) : nodes(initialNodes), sz(initialNodes.size()) {}
-
-
-    int add(const Node<Key, Value>& node) {
-        nodes.push_back(node);
-        return ++sz;
-    }
-
-    int add(const Key key, const Value value){
-        return add(Node<Key, Value>(key, value));
-    }
-
-    int add(int id){
-        nodes.push_back(nodes[id]);
-        return ++sz;
-    }
-
-    int size() const {
-        return sz;
-    }
-
-    Node<Key, Value>& operator[](int index) {
-        return nodes[index];
-    }
-};
-
-template<typename Key, typename Value>
 Nodes<Key, Value> nodes;
 
 template<typename Value>
@@ -84,7 +30,7 @@ struct Node{
     Key key;
     int vID;
     int y;
-    pair<int, int>p;
+    std :: pair<int, int>p;
     Node() : y(rng()), p({0, 0}) {}
     Node(Key k, Value v) : key(k), y(rng()), p({0, 0}) { vID = values<Value>.add(v); }
     Node(int id) : key(nodes<Key, Value>[id].key), vID(nodes<Key, Value>[id].vID), y(nodes<Key, Value>[id].y), p(nodes<Key, Value>[id].p) {}
@@ -220,7 +166,6 @@ int main(){
     Treap<int, int>T;
     T.insert(1, 1);
     T.insert(3, 4);
-    // T.insert(1, 9);
     T.insert(2, 5);
     T.insert(9, 0);
     snapshot(T);
